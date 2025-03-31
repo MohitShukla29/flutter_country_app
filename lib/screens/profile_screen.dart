@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/theme_controller.dart';
 import '../controllers/userController.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserController userController = Get.find<UserController>();
+    final ThemeController themeController = Get.find();
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           "My Profile",
@@ -20,15 +24,30 @@ class ProfilePage extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme
+            .of(context)
+            .appBarTheme
+            .backgroundColor,
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.settings_outlined),
+        //     onPressed: () {
+        //       // Keeping the action empty to maintain original logic
+        //     },
+        //   ),
+        // ],
         actions: [
-          IconButton(
-            icon: Icon(Icons.settings_outlined),
-            onPressed: () {
-              // Keeping the action empty to maintain original logic
-            },
-          ),
+          Obx(() =>
+              IconButton(
+                icon: Icon(
+                    themeController.isDarkMode.value ? Icons.dark_mode : Icons
+                        .light_mode),
+                onPressed: () {
+                  themeController.toggleTheme();
+                },
+              )),
         ],
+
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -48,7 +67,10 @@ class ProfilePage extends StatelessWidget {
                     child: Container(
                       height: 120,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme
+                            .of(context)
+                            .colorScheme
+                            .surface,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(30),
                           bottomRight: Radius.circular(30),
@@ -64,7 +86,9 @@ class ProfilePage extends StatelessWidget {
                       return Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme
+                              .of(context)
+                              .cardColor,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -77,14 +101,27 @@ class ProfilePage extends StatelessWidget {
                         ),
                         child: CircleAvatar(
                           radius: 65,
-                          backgroundColor: Colors.grey[200],
-                          backgroundImage: userController.userModel.value?.profilePictureUrl != null &&
-                              userController.userModel.value!.profilePictureUrl!.isNotEmpty
-                              ? MemoryImage(base64Decode(userController.userModel.value!.profilePictureUrl!))
+                          backgroundColor: Theme
+                              .of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.1),
+                          backgroundImage: userController.userModel.value
+                              ?.profilePictureUrl != null &&
+                              userController.userModel.value!.profilePictureUrl!
+                                  .isNotEmpty
+                              ? MemoryImage(base64Decode(
+                              userController.userModel.value!
+                                  .profilePictureUrl!))
                               : null,
-                          child: userController.userModel.value?.profilePictureUrl == null ||
-                              userController.userModel.value!.profilePictureUrl!.isEmpty
-                              ? Icon(Icons.account_circle, size: 65, color: Colors.grey[400])
+                          child: userController.userModel.value
+                              ?.profilePictureUrl == null ||
+                              userController.userModel.value!.profilePictureUrl!
+                                  .isEmpty
+                              ? Icon(
+                              Icons.account_circle, size: 65, color: Theme
+                              .of(context)
+                              .hintColor)
                               : null,
                         ),
                       );
@@ -101,43 +138,53 @@ class ProfilePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Full Name
-                  Obx(() => Text(
-                    userController.userModel.value?.fullName ?? "No Name",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  )),
+                  Obx(() =>
+                      Text(
+                        userController.userModel.value?.fullName ?? "No Name",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.color,
+                        ),
+                      )),
                   SizedBox(height: 5),
 
                   // Email with icon
-                  Obx(() => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.email_outlined,
-                        size: 16,
-                        color: Colors.grey[600],
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        userController.userModel.value?.email ?? "No Email",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  )),
+                  Obx(() =>
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.email_outlined,
+                            size: 16,
+                            color: Colors.grey[600],
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            userController.userModel.value?.email ?? "No Email",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Theme
+                                  .of(context)
+                                  .hintColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),
 
                   SizedBox(height: 30),
 
                   // Profile Details Card
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme
+                          .of(context)
+                          .cardColor,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
@@ -162,7 +209,9 @@ class ProfilePage extends StatelessWidget {
                             },
                           ),
 
-                          Divider(height: 25, thickness: 1),
+                          Divider(height: 25, thickness: 1, color: Theme
+                              .of(context)
+                              .dividerColor),
 
                           // Profile option - Privacy Settings
                           _buildProfileOption(
@@ -198,7 +247,7 @@ class ProfilePage extends StatelessWidget {
                     height: 55,
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        await userController.logout();  // Perform logout
+                        await userController.logout(); // Perform logout
                       },
                       icon: Icon(Icons.logout, color: Colors.white),
                       label: Text(
@@ -227,7 +276,9 @@ class ProfilePage extends StatelessWidget {
                     "App Version 1.0.0",
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey[500],
+                      color: Theme
+                          .of(context)
+                          .hintColor,
                     ),
                   ),
                   SizedBox(height: 20),
@@ -247,44 +298,51 @@ class ProfilePage extends StatelessWidget {
     required Color color,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 22,
-              ),
-            ),
-            SizedBox(width: 15),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+    return Builder(builder: (context) {
+      bool isDarkMode = Theme
+          .of(context)
+          .brightness == Brightness.dark;
+      Color textColor = isDarkMode ? Colors.white : Colors.black87;
+
+      return InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  icon,
+                  color: color, // Keep icon color as per input
+                  size: 22,
                 ),
               ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey,
-              size: 16,
-            ),
-          ],
+              SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: textColor, // ✅ Ensure text is white in dark mode
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: isDarkMode ? Colors.white54 : Colors.grey,
+                size: 16,
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
