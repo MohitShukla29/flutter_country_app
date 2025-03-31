@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:convert'; // ✅ Import for Base64 encoding
+import 'dart:convert'; // ✅ Base64 Encoding
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -9,6 +9,7 @@ import '../models/userModel.dart';
 class UserController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   Rx<UserModel?> userModel = Rx<UserModel?>(null);
   var profileImage = Rx<File?>(null);
 
@@ -16,48 +17,58 @@ class UserController extends GetxController {
   void onInit() {
     super.onInit();
     if (auth.currentUser != null) {
-      getUserDetails(); // 🔥 Fetch user details when controller initializes
+      getUserDetails(); // 🔥 Fetch user details on startup
     }
   }
 
   Future<void> saveUserDetails(String fullName, String email, File? image) async {
     try {
-      String uid = auth.currentUser!.uid;
+      User? user = auth.currentUser;
+      if (user == null) return;
+
+      String uid = user.uid;
       String? base64Image;
 
       // Convert image to Base64 if selected
       if (image != null) {
-        List<int> imageBytes = await image.readAsBytes(); // Read file as bytes
-        base64Image = base64Encode(imageBytes); // Encode to Base64
+        List<int> imageBytes = await image.readAsBytes();
+        base64Image = base64Encode(imageBytes);
       }
 
-      // Create user model
-      UserModel user = UserModel(
+      // Get existing user data (to avoid overwriting)
+      DocumentSnapshot doc = await firestore.collection('users').doc(uid).get();
+      Map<String, dynamic> existingData = doc.exists ? doc.data() as Map<String, dynamic> : {};
+
+      // Merge existing and new data
+      UserModel userData = UserModel(
         uid: uid,
         fullName: fullName,
         email: email,
-        profilePictureUrl: base64Image ?? userModel.value?.profilePictureUrl ?? "", // Keep old image if no new one
+        profilePictureUrl: base64Image ?? existingData['profilePictureUrl'] ?? "", // Keep old image
       );
 
-      // Save user data to Firestore
-      await firestore.collection('users').doc(uid).set(user.toMap());
+      // Use `update()` instead of `set()` to avoid overwriting
+      await firestore.collection('users').doc(uid).set(userData.toMap(), SetOptions(merge: true));
 
-      userModel.value = user;
-      update(); // 🔥 Update UI with new data
+      userModel.value = userData;
+      update(); // 🔥 Refresh UI
       Get.snackbar("Success", "User details saved successfully!");
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      Get.snackbar("Error", "Failed to save user details: ${e.toString()}");
     }
   }
 
   Future<void> getUserDetails() async {
     try {
-      String uid = auth.currentUser!.uid;
+      User? user = auth.currentUser;
+      if (user == null) return;
+
+      String uid = user.uid;
       DocumentSnapshot doc = await firestore.collection('users').doc(uid).get();
 
       if (doc.exists) {
         userModel.value = UserModel.fromMap(doc.data() as Map<String, dynamic>);
-        update(); // 🔥 Ensure UI updates when user details are fetched
+        update(); // 🔥 Ensure UI updates
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to fetch user details");
@@ -67,7 +78,7 @@ class UserController extends GetxController {
   Future<File?> pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      profileImage.value = File(pickedFile.path); // ✅ Updates reactive variable
+      profileImage.value = File(pickedFile.path);
       return profileImage.value;
     }
     return null;
@@ -75,11 +86,11 @@ class UserController extends GetxController {
 
   Future<void> logout() async {
     try {
-      await auth.signOut(); // Firebase sign out
+      await auth.signOut();
       userModel.value = null; // Clear user data
       profileImage.value = null; // Clear profile image
-      update(); // Update UI
-      Get.offAllNamed('/'); // Redirect to login screen
+      update(); // Refresh UI
+      Get.offAllNamed('/login'); // ✅ Redirect to login screen
     } catch (e) {
       Get.snackbar("Error", "Failed to log out");
     }

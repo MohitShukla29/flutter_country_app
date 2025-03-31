@@ -15,7 +15,7 @@ class CountryListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("Explore Countries"),
         actions: [
           Obx(() {
             var userController = Get.find<UserController>();
@@ -37,7 +37,7 @@ class CountryListScreen extends StatelessWidget {
         ],
       ),
 
-        body: Obx(() {
+      body: Obx(() {
         if (countryController.isLoading.value) {
           return Center(child: CircularProgressIndicator());
         }

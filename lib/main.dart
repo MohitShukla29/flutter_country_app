@@ -2,17 +2,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_country_app/screens/country_list_screen.dart';
 import 'package:flutter_country_app/screens/profile_screen.dart';
+import 'package:flutter_country_app/screens/splash_screen.dart';
 import 'package:flutter_country_app/screens/user_info_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart'; // Import GetX
 import 'package:flutter_country_app/screens/login_screen.dart';
 
+import 'controllers/userController.dart';
 import 'firebase_options.dart';
 import 'home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp();
   }
@@ -30,9 +33,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       getPages: [
         GetPage(name: '/', page: () => OTPScreen()),
+        GetPage(name: '/splash', page: () => SplashScreen()),
         GetPage(name: '/info', page: () => UserInfoScreen()),
         GetPage(name: '/profile', page: () => ProfilePage()),
         GetPage(name: '/country', page: () => CountryListScreen()),
