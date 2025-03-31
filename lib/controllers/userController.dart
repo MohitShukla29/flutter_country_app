@@ -17,11 +17,15 @@ class UserController extends GetxController {
   void onInit() {
     super.onInit();
     if (auth.currentUser != null) {
-      getUserDetails(); // 🔥 Fetch user details on startup
+      getUserDetails();
     }
   }
 
-  Future<void> saveUserDetails(String fullName, String email, File? image) async {
+  Future<void> saveUserDetails(
+    String fullName,
+    String email,
+    File? image,
+  ) async {
     try {
       User? user = auth.currentUser;
       if (user == null) return;
@@ -29,29 +33,30 @@ class UserController extends GetxController {
       String uid = user.uid;
       String? base64Image;
 
-      // Convert image to Base64 if selected
       if (image != null) {
         List<int> imageBytes = await image.readAsBytes();
         base64Image = base64Encode(imageBytes);
       }
 
-      // Get existing user data (to avoid overwriting)
       DocumentSnapshot doc = await firestore.collection('users').doc(uid).get();
-      Map<String, dynamic> existingData = doc.exists ? doc.data() as Map<String, dynamic> : {};
+      Map<String, dynamic> existingData =
+          doc.exists ? doc.data() as Map<String, dynamic> : {};
 
-      // Merge existing and new data
       UserModel userData = UserModel(
         uid: uid,
         fullName: fullName,
         email: email,
-        profilePictureUrl: base64Image ?? existingData['profilePictureUrl'] ?? "", // Keep old image
+        profilePictureUrl:
+            base64Image ?? existingData['profilePictureUrl'] ?? "",
       );
 
-      // Use `update()` instead of `set()` to avoid overwriting
-      await firestore.collection('users').doc(uid).set(userData.toMap(), SetOptions(merge: true));
+      await firestore
+          .collection('users')
+          .doc(uid)
+          .set(userData.toMap(), SetOptions(merge: true));
 
       userModel.value = userData;
-      update(); // 🔥 Refresh UI
+      update();
       Get.snackbar("Success", "User details saved successfully!");
     } catch (e) {
       Get.snackbar("Error", "Failed to save user details: ${e.toString()}");
@@ -68,7 +73,7 @@ class UserController extends GetxController {
 
       if (doc.exists) {
         userModel.value = UserModel.fromMap(doc.data() as Map<String, dynamic>);
-        update(); // 🔥 Ensure UI updates
+        update();
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to fetch user details");
@@ -76,7 +81,9 @@ class UserController extends GetxController {
   }
 
   Future<File?> pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       profileImage.value = File(pickedFile.path);
       return profileImage.value;
@@ -87,10 +94,10 @@ class UserController extends GetxController {
   Future<void> logout() async {
     try {
       await auth.signOut();
-      userModel.value = null; // Clear user data
-      profileImage.value = null; // Clear profile image
+      userModel.value = null;
+      profileImage.value = null;
       update(); // Refresh UI
-      Get.offAllNamed('/login'); // ✅ Redirect to login screen
+      Get.offAllNamed('/login');
     } catch (e) {
       Get.snackbar("Error", "Failed to log out");
     }

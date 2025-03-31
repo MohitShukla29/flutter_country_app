@@ -20,11 +20,15 @@ class CountryController extends GetxController {
 
   Future<void> fetchCountries() async {
     try {
-      final response = await http.get(Uri.parse("${dotenv.env['api_key_endpoint']}"));
+      final response = await http.get(
+        Uri.parse("${dotenv.env['api_key_endpoint']}"),
+      );
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(response.body);
         countries.assignAll(data);
-        filteredCountries.assignAll(data.take(10).toList()); // Initially show 10 countries
+        filteredCountries.assignAll(
+          data.take(10).toList(),
+        ); // Initially show 10 countries
       } else {
         Get.snackbar("Error", "Failed to load countries");
       }
@@ -37,11 +41,19 @@ class CountryController extends GetxController {
 
   void filterCountries(String query) {
     if (query.isEmpty) {
-      filteredCountries.assignAll(countries.take(10)); // Reset to first 10 if empty search
+      filteredCountries.assignAll(
+        countries.take(10),
+      ); // Reset to first 10 if empty search
     } else {
       filteredCountries.assignAll(
-        countries.where((country) =>
-            country["name"]["common"].toString().toLowerCase().contains(query.toLowerCase())).toList(),
+        countries
+            .where(
+              (country) => country["name"]["common"]
+                  .toString()
+                  .toLowerCase()
+                  .contains(query.toLowerCase()),
+            )
+            .toList(),
       );
     }
   }
@@ -50,23 +62,30 @@ class CountryController extends GetxController {
     sortAscending.value = !sortAscending.value;
 
     // Sort the full list BEFORE applying pagination
-    countries.sort((a, b) => sortAscending.value
-        ? a["population"].compareTo(b["population"])  // Ascending order
-        : b["population"].compareTo(a["population"])); // Descending order
+    countries.sort(
+      (a, b) =>
+          sortAscending.value
+              ? a["population"].compareTo(b["population"])
+              : b["population"].compareTo(a["population"]),
+    );
 
     // Apply pagination after sorting
     filteredCountries.assignAll(countries.take(itemsPerPage.value));
   }
 
-
-  void addCustomCountry(String name, String capital, String region, int population) {
+  void addCustomCountry(
+    String name,
+    String capital,
+    String region,
+    int population,
+  ) {
     var newCountry = {
       "id": DateTime.now().toString(), // Unique ID for deletion
       "name": {"common": name},
       "capital": [capital],
       "region": region,
       "population": population,
-      "flags": {"png": "https://via.placeholder.com/50"} // Placeholder flag
+      "flags": {"png": "https://via.placeholder.com/50"},
     };
 
     customCountries.add(newCountry);
@@ -81,11 +100,11 @@ class CountryController extends GetxController {
     if (newLimit <= countries.length) {
       itemsPerPage.value = newLimit;
     } else {
-      itemsPerPage.value = countries.length; // Prevent exceeding total countries
+      itemsPerPage.value =
+          countries.length; // Prevent exceeding total countries
     }
 
     // Always take sorted countries
     filteredCountries.assignAll(countries.take(itemsPerPage.value));
   }
-
 }

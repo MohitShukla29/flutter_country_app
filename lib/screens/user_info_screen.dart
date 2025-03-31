@@ -73,20 +73,26 @@ class UserInfoScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Obx(() => CircleAvatar(
-                        radius: 60,
-                        backgroundColor: Theme.of(context).cardColor,
-                        backgroundImage: userController.profileImage.value != null
-                            ? FileImage(userController.profileImage.value!)
-                            : null,
-                        child: userController.profileImage.value == null
-                            ? Icon(
-                          Icons.person,
-                          size: 60,
-                          color: Theme.of(context).iconTheme.color,
-                        )
-                            : null,
-                      )),
+                      child: Obx(
+                        () => CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Theme.of(context).cardColor,
+                          backgroundImage:
+                              userController.profileImage.value != null
+                                  ? FileImage(
+                                    userController.profileImage.value!,
+                                  )
+                                  : null,
+                          child:
+                              userController.profileImage.value == null
+                                  ? Icon(
+                                    Icons.person,
+                                    size: 60,
+                                    color: Theme.of(context).iconTheme.color,
+                                  )
+                                  : null,
+                        ),
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
@@ -139,12 +145,17 @@ class UserInfoScreen extends StatelessWidget {
                         labelStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
-                        prefixIcon: Icon(Icons.person_outline, color: Theme.of(context).iconTheme.color),
+                        prefixIcon: Icon(
+                          Icons.person_outline,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         filled: true,
-                        fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor,
+                        fillColor:
+                            Theme.of(context).inputDecorationTheme.fillColor ??
+                            Theme.of(context).cardColor,
                       ),
                     ),
                     SizedBox(height: 20),
@@ -158,12 +169,17 @@ class UserInfoScreen extends StatelessWidget {
                         labelStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
-                        prefixIcon: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         filled: true,
-                        fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor,
+                        fillColor:
+                            Theme.of(context).inputDecorationTheme.fillColor ??
+                            Theme.of(context).cardColor,
                       ),
                     ),
                   ],

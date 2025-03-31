@@ -5,7 +5,7 @@ import 'package:flutter_country_app/screens/profile_screen.dart';
 import 'package:flutter_country_app/screens/splash_screen.dart';
 import 'package:flutter_country_app/screens/user_info_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart'; // Import GetX
+import 'package:get/get.dart';
 import 'package:flutter_country_app/screens/login_screen.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -32,12 +32,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find();
-    return GetMaterialApp( // ✅ Use GetMaterialApp instead of MaterialApp
+    return GetMaterialApp(
       title: 'Flutter Country App',
       // theme: ThemeData(
       //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       // ),
-      themeMode: themeController.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
+      themeMode:
+          themeController.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData.light(),
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),

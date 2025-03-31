@@ -16,15 +16,15 @@ class AuthController extends GetxController {
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential);
         Get.snackbar("Success", "Phone Number Verified");
-        isLoading(false); // Stop loading
+        isLoading(false);
       },
       verificationFailed: (FirebaseAuthException e) {
-        isLoading(false); // Stop loading if verification fails
+        isLoading(false);
         Get.snackbar("Error", e.message ?? "Something went wrong");
       },
       codeSent: (String verificationId, int? resendToken) {
         this.verificationId.value = verificationId;
-        isLoading(false); // Stop loading after OTP is sent
+        isLoading(false);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         this.verificationId.value = verificationId;
@@ -45,7 +45,7 @@ class AuthController extends GetxController {
         smsCode: otp,
       );
       await auth.signInWithCredential(credential);
-      Get.toNamed('/info'); // Navigate to UserInfoScreen after successful verification
+      Get.toNamed('/info');
     } catch (e) {
       Get.snackbar("Error", "Invalid OTP. Please try again.");
     }

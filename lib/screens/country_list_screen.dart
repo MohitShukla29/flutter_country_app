@@ -20,19 +20,25 @@ class CountryListScreen extends StatelessWidget {
           Obx(() {
             var userController = Get.find<UserController>();
             return userController.userModel.value?.profilePictureUrl != null &&
-                userController.userModel.value!.profilePictureUrl!.isNotEmpty
+                    userController
+                        .userModel
+                        .value!
+                        .profilePictureUrl!
+                        .isNotEmpty
                 ? GestureDetector(
-              onTap: () => Get.toNamed('/profile'),
-              child: CircleAvatar(
-                backgroundImage: MemoryImage(
-                  base64Decode(userController.userModel.value!.profilePictureUrl!),
-                ),
-              ),
-            )
+                  onTap: () => Get.toNamed('/profile'),
+                  child: CircleAvatar(
+                    backgroundImage: MemoryImage(
+                      base64Decode(
+                        userController.userModel.value!.profilePictureUrl!,
+                      ),
+                    ),
+                  ),
+                )
                 : IconButton(
-              icon: Icon(Icons.account_circle, size: 30),
-              onPressed: () =>Get.toNamed('/profile'),
-            );
+                  icon: Icon(Icons.account_circle, size: 30),
+                  onPressed: () => Get.toNamed('/profile'),
+                );
           }),
         ],
       ),
@@ -84,9 +90,13 @@ class CountryListScreen extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: ElevatedButton(
             onPressed: Get.find<CountryController>().sortCountries,
-            child: Obx(() => Text(Get.find<CountryController>().sortAscending.value
-                ? "Sort by Population ↓"
-                : "Sort by Population ↑")),
+            child: Obx(
+              () => Text(
+                Get.find<CountryController>().sortAscending.value
+                    ? "Sort by Population ↓"
+                    : "Sort by Population ↑",
+              ),
+            ),
           ),
         ),
       ],
@@ -96,31 +106,39 @@ class CountryListScreen extends StatelessWidget {
   Widget _buildPaginatedCountryList() {
     return Column(
       children: [
-        ...Get.find<CountryController>().filteredCountries.map((country) => _buildCountryTile(country)).toList(),
-        Obx(() => Get.find<CountryController>().itemsPerPage.value < Get.find<CountryController>().countries.length
-            ? Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ElevatedButton(
-            onPressed: Get.find<CountryController>().loadMoreCountries,
-            child: Text("Load More"),
-          ),
-        )
-            : SizedBox()),
+        ...Get.find<CountryController>().filteredCountries
+            .map((country) => _buildCountryTile(country))
+            .toList(),
+        Obx(
+          () =>
+              Get.find<CountryController>().itemsPerPage.value <
+                      Get.find<CountryController>().countries.length
+                  ? Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ElevatedButton(
+                      onPressed:
+                          Get.find<CountryController>().loadMoreCountries,
+                      child: Text("Load More"),
+                    ),
+                  )
+                  : SizedBox(),
+        ),
       ],
     );
   }
-
 
   Widget _buildCountryTile(dynamic country) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
-        leading: country["flags"] != null
-            ? Image.network(country["flags"]["png"], width: 50, height: 30)
-            : Icon(Icons.flag),
+        leading:
+            country["flags"] != null
+                ? Image.network(country["flags"]["png"], width: 50, height: 30)
+                : Icon(Icons.flag),
         title: Text(country["name"]["common"]),
         subtitle: Text(
-            "Capital: ${country["capital"]?[0] ?? "N/A"}\nRegion: ${country["region"]}\nPopulation: ${country["population"]}"),
+          "Capital: ${country["capital"]?[0] ?? "N/A"}\nRegion: ${country["region"]}\nPopulation: ${country["population"]}",
+        ),
       ),
     );
   }
@@ -137,26 +155,38 @@ class CountryListScreen extends StatelessWidget {
           ),
         ),
         StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('custom_countries').snapshots(),
+          stream:
+              FirebaseFirestore.instance
+                  .collection('custom_countries')
+                  .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+            if (!snapshot.hasData)
+              return Center(child: CircularProgressIndicator());
 
             return Column(
               children: [
                 ...snapshot.data!.docs.map((doc) {
                   return ListTile(
                     title: Text(doc["name"]),
-                    subtitle: Text("Capital: ${doc["capital"]}, Population: ${doc["population"]}"),
+                    subtitle: Text(
+                      "Capital: ${doc["capital"]}, Population: ${doc["population"]}",
+                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(icon: Icon(Icons.edit,color: Colors.blue,), onPressed: () => _showEditDialog(doc)),
-                        IconButton(icon: Icon(Icons.delete,color: Colors.red,), onPressed: () => _deleteCountry(doc.id)),
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () => _showEditDialog(doc),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _deleteCountry(doc.id),
+                        ),
                       ],
                     ),
                   );
                 }).toList(),
-                // Add padding at the bottom to prevent the FloatingActionButton from covering content
+
                 SizedBox(height: 80),
               ],
             );
@@ -178,21 +208,36 @@ class CountryListScreen extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: nameController, decoration: InputDecoration(labelText: "Name")),
-            TextField(controller: capitalController, decoration: InputDecoration(labelText: "Capital")),
-            TextField(controller: regionController, decoration: InputDecoration(labelText: "Region")),
-            TextField(controller: populationController, decoration: InputDecoration(labelText: "Population"), keyboardType: TextInputType.number),
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: "Name"),
+            ),
+            TextField(
+              controller: capitalController,
+              decoration: InputDecoration(labelText: "Capital"),
+            ),
+            TextField(
+              controller: regionController,
+              decoration: InputDecoration(labelText: "Region"),
+            ),
+            TextField(
+              controller: populationController,
+              decoration: InputDecoration(labelText: "Population"),
+              keyboardType: TextInputType.number,
+            ),
           ],
         ),
         actions: [
           ElevatedButton(
             onPressed: () async {
-              await FirebaseFirestore.instance.collection('custom_countries').add({
-                "name": nameController.text,
-                "capital": capitalController.text,
-                "region": regionController.text,
-                "population": int.parse(populationController.text),
-              });
+              await FirebaseFirestore.instance
+                  .collection('custom_countries')
+                  .add({
+                    "name": nameController.text,
+                    "capital": capitalController.text,
+                    "region": regionController.text,
+                    "population": int.parse(populationController.text),
+                  });
               Get.back();
             },
             child: Text("Add"),
@@ -203,9 +248,15 @@ class CountryListScreen extends StatelessWidget {
   }
 
   void _showEditDialog(QueryDocumentSnapshot doc) {
-    TextEditingController nameController = TextEditingController(text: doc["name"]);
-    TextEditingController capitalController = TextEditingController(text: doc["capital"]);
-    TextEditingController populationController = TextEditingController(text: doc["population"].toString());
+    TextEditingController nameController = TextEditingController(
+      text: doc["name"],
+    );
+    TextEditingController capitalController = TextEditingController(
+      text: doc["capital"],
+    );
+    TextEditingController populationController = TextEditingController(
+      text: doc["population"].toString(),
+    );
 
     Get.dialog(
       AlertDialog(
@@ -213,19 +264,32 @@ class CountryListScreen extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: nameController, decoration: InputDecoration(labelText: "Name")),
-            TextField(controller: capitalController, decoration: InputDecoration(labelText: "Capital")),
-            TextField(controller: populationController, decoration: InputDecoration(labelText: "Population"), keyboardType: TextInputType.number),
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: "Name"),
+            ),
+            TextField(
+              controller: capitalController,
+              decoration: InputDecoration(labelText: "Capital"),
+            ),
+            TextField(
+              controller: populationController,
+              decoration: InputDecoration(labelText: "Population"),
+              keyboardType: TextInputType.number,
+            ),
           ],
         ),
         actions: [
           ElevatedButton(
             onPressed: () async {
-              await FirebaseFirestore.instance.collection('custom_countries').doc(doc.id).update({
-                "name": nameController.text,
-                "capital": capitalController.text,
-                "population": int.parse(populationController.text),
-              });
+              await FirebaseFirestore.instance
+                  .collection('custom_countries')
+                  .doc(doc.id)
+                  .update({
+                    "name": nameController.text,
+                    "capital": capitalController.text,
+                    "population": int.parse(populationController.text),
+                  });
               Get.back();
             },
             child: Text("Update"),
@@ -236,6 +300,9 @@ class CountryListScreen extends StatelessWidget {
   }
 
   void _deleteCountry(String id) async {
-    await FirebaseFirestore.instance.collection('custom_countries').doc(id).delete();
+    await FirebaseFirestore.instance
+        .collection('custom_countries')
+        .doc(id)
+        .delete();
   }
 }

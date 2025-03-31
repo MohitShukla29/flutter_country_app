@@ -7,18 +7,18 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 2), () {
-      // Ensure UserController is initialized permanently
+
       if (!Get.isRegistered<UserController>()) {
         Get.put(UserController(), permanent: true);
       }
 
-      // Check Firebase Authentication
+
       User? user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
-        Get.offAllNamed('/country'); // Navigate to CountryScreen
+        Get.offAllNamed('/country');
       } else {
-        Get.offAllNamed('/'); // Navigate to LoginScreen
+        Get.offAllNamed('/');
       }
     });
 

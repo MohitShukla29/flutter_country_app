@@ -11,7 +11,6 @@ class CustomCountryController extends GetxController {
     fetchCustomCountries();
   }
 
-  // 🔥 Fetch custom countries in real time
   void fetchCustomCountries() {
     firestore.collection("custom_countries").snapshots().listen((snapshot) {
       customCountries.value =
@@ -19,8 +18,12 @@ class CustomCountryController extends GetxController {
     });
   }
 
-  // 🔥 Add a new country
-  Future<void> addCountry(String name, String capital, String region, int population) async {
+  Future<void> addCountry(
+    String name,
+    String capital,
+    String region,
+    int population,
+  ) async {
     await firestore.collection("custom_countries").add({
       "name": name,
       "capital": capital,
@@ -29,8 +32,13 @@ class CustomCountryController extends GetxController {
     });
   }
 
-  // 🔥 Update country details
-  Future<void> updateCountry(String id, String name, String capital, String region, int population) async {
+  Future<void> updateCountry(
+    String id,
+    String name,
+    String capital,
+    String region,
+    int population,
+  ) async {
     await firestore.collection("custom_countries").doc(id).update({
       "name": name,
       "capital": capital,
@@ -39,11 +47,7 @@ class CustomCountryController extends GetxController {
     });
   }
 
-  // 🔥 Delete country from Firestore
   Future<void> deleteCountry(String id) async {
     await firestore.collection("custom_countries").doc(id).delete();
   }
-
-
 }
-
