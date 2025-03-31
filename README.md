@@ -17,7 +17,7 @@ This Flutter application integrates Firebase OTP authentication, Firestore datab
 - *Base64-Encoded Profile Image Storage** (instead of Firebase Storage)
 
 📌 Authentication Details
-This app uses test number and OTP during development.
+  This app uses test number and OTP during development.
   
 ## 📷 Screenshots
 ### Loading Screen
