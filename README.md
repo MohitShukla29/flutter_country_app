@@ -17,16 +17,17 @@ This Flutter application integrates Firebase OTP authentication, Firestore datab
   
 ## 📷 Screenshots
 ### Loading Screen
-<img src="Splash_screen.jpg" width="400" alt="Loading Screen">
+<img src="Splash_screen.jpg" width="250" alt="Loading Screen">
 ### Login Screen
-![Login Screen](Login_screen.jpg)
+<img src="Login_screen.jpg" width="250" alt="Login Screen">
 ### User 
-![Complete Profile Screen](user_info_screen.jpg)
+<img src="user_info_screen.jpg" width="250" alt="User Info Screen">
 ### Country Screen
-![Country Screen](Country_screen.jpg)
+<img src="Country_screen.jpg" width="250" alt="Country Screen">
 ### Custom Added Countries 
-![Country Explorer Screen](Custom_added_countries.jpg)
+<img src="Custom_added_countries.jpg" width="250" alt="Custom Added Countries Screen">
 ### Profile Screen
+<img src="profile_screen.jpg" width="250" alt="Profile Screen">
 ![Profile Screen](profile_screen.jpg)
 
 ## 🚀 Setup Instructions
