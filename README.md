@@ -16,8 +16,8 @@ This Flutter application integrates Firebase OTP authentication, Firestore datab
 - Offline Support using Firestore caching
   
 ## 📷 Screenshots
- Loading Screen
-<img src="Splash_screen.jpg" width="250" alt="Loading Screen">
+### Loading Screen
+<img src="Splash_screen.jpg" width="250" >
 Login Screen
 <img src="Login_screen.jpg" width="250" alt="Login Screen">
  User 
