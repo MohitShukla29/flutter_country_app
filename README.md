@@ -17,7 +17,7 @@ This Flutter application integrates Firebase OTP authentication, Firestore datab
   
 ## 📷 Screenshots
 ### Loading Screen
-![Loading Screen](Loading_screen.jpg)
+![Loading Screen](Splash_screen.jpg)
 ### Login Screen
 ![Login Screen](Login_screen.jpg)
 ### Complete Profile Screen
