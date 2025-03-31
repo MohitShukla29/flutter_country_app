@@ -28,7 +28,6 @@ This Flutter application integrates Firebase OTP authentication, Firestore datab
 <img src="Custom_added_countries.jpg" width="250" alt="Custom Added Countries Screen">
 ### Profile Screen
 <img src="profile_screen.jpg" width="250" alt="Profile Screen">
-![Profile Screen](profile_screen.jpg)
 
 ## 🚀 Setup Instructions
 1. **Clone the Repository**
