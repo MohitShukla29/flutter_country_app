@@ -14,6 +14,10 @@ This Flutter application integrates Firebase OTP authentication, Firestore datab
 - Loading Indicators & Animations
 - Pagination for Firestore data
 - Offline Support using Firestore caching
+- *Base64-Encoded Profile Image Storage** (instead of Firebase Storage)
+
+📌 Authentication Details
+This app uses test number and OTP during development.
   
 ## 📷 Screenshots
 ### Loading Screen
@@ -49,7 +53,7 @@ Profile Screen
    ```
 ## 🛠 Tech Stack
 - Flutter (Dart)
-- Firebase (Auth, Firestore, Storage)
+- Firebase (Auth, Firestore)
 - GetX (State Management, Routing, Snackbar)
 - REST API (REST Countries API)
 - HTTP Package
