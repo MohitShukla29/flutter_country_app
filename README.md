@@ -1,4 +1,4 @@
-# Flutter App - Firebase, REST API & GetX State Management
+# Flutter Country App - Firebase, REST API & GetX State Management
 ## 📌 Overview
 This Flutter application integrates Firebase OTP authentication, Firestore database, REST API, and GetX state management. Users can log in with their mobile number, manage personal details, fetch country data from an API, and perform CRUD operations on Firestore.
 ## 🎯 Features
