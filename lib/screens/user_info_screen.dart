@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/userController.dart';
-import 'country_list_screen.dart';
 
 class UserInfoScreen extends StatelessWidget {
   final UserController userController = Get.put(UserController());
@@ -12,14 +11,17 @@ class UserInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           "Complete Profile",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).textTheme.titleLarge?.color,
+          ),
         ),
         elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -34,7 +36,7 @@ class UserInfoScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               SizedBox(height: 6),
@@ -42,7 +44,7 @@ class UserInfoScreen extends StatelessWidget {
                 "Please provide your details to continue",
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey[600],
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
               SizedBox(height: 30),
@@ -59,7 +61,7 @@ class UserInfoScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                           width: 3,
                         ),
                         boxShadow: [
@@ -73,7 +75,7 @@ class UserInfoScreen extends StatelessWidget {
                       ),
                       child: Obx(() => CircleAvatar(
                         radius: 60,
-                        backgroundColor: Colors.grey[200],
+                        backgroundColor: Theme.of(context).cardColor,
                         backgroundImage: userController.profileImage.value != null
                             ? FileImage(userController.profileImage.value!)
                             : null,
@@ -81,7 +83,7 @@ class UserInfoScreen extends StatelessWidget {
                             ? Icon(
                           Icons.person,
                           size: 60,
-                          color: Colors.grey[400],
+                          color: Theme.of(context).iconTheme.color,
                         )
                             : null,
                       )),
@@ -93,10 +95,10 @@ class UserInfoScreen extends StatelessWidget {
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.white,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             width: 2,
                           ),
                         ),
@@ -113,7 +115,7 @@ class UserInfoScreen extends StatelessWidget {
               SizedBox(height: 40),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -129,64 +131,46 @@ class UserInfoScreen extends StatelessWidget {
                   children: [
                     TextField(
                       controller: fullNameController,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
                       decoration: InputDecoration(
                         labelText: "Full Name",
-                        prefixIcon: Icon(Icons.person_outline),
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                        ),
+                        prefixIcon: Icon(Icons.person_outline, color: Theme.of(context).iconTheme.color),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Colors.grey[300]!,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Colors.grey[300]!,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
-                          ),
                         ),
                         filled: true,
-                        fillColor: Colors.grey[50],
+                        fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor,
                       ),
                     ),
                     SizedBox(height: 20),
                     TextField(
                       controller: emailController,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
                       decoration: InputDecoration(
                         labelText: "Email",
-                        prefixIcon: Icon(Icons.email_outlined),
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                        ),
+                        prefixIcon: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Colors.grey[300]!,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Colors.grey[300]!,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
-                          ),
                         ),
                         filled: true,
-                        fillColor: Colors.grey[50],
+                        fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor,
                       ),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 40),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
@@ -196,10 +180,10 @@ class UserInfoScreen extends StatelessWidget {
                       emailController.text,
                       userController.profileImage.value,
                     );
-                    Get.toNamed('/country');
+                    Get.offAllNamed('/country');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -211,6 +195,7 @@ class UserInfoScreen extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),

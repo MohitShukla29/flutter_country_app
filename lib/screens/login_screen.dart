@@ -99,6 +99,7 @@ class OTPScreen extends StatelessWidget {
                   ),
                   child: TextField(
                     controller: phoneController,
+                    style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: "Enter your phone number",
                       prefixIcon: Icon(Icons.phone, color: Colors.blueAccent),
@@ -163,6 +164,7 @@ class OTPScreen extends StatelessWidget {
                   ),
                   child: TextField(
                     controller: otpController,
+                    style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: "Enter the 6-digit OTP",
                       prefixIcon: Icon(Icons.lock, color: Colors.blueAccent),

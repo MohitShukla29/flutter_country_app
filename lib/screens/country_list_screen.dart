@@ -59,9 +59,9 @@ class CountryListScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddCountryDialog(context),
         child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -142,19 +142,23 @@ class CountryListScreen extends StatelessWidget {
             if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 
             return Column(
-              children: snapshot.data!.docs.map((doc) {
-                return ListTile(
-                  title: Text(doc["name"]),
-                  subtitle: Text("Capital: ${doc["capital"]}, Population: ${doc["population"]}"),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(icon: Icon(Icons.edit), onPressed: () => _showEditDialog(doc)),
-                      IconButton(icon: Icon(Icons.delete), onPressed: () => _deleteCountry(doc.id)),
-                    ],
-                  ),
-                );
-              }).toList(),
+              children: [
+                ...snapshot.data!.docs.map((doc) {
+                  return ListTile(
+                    title: Text(doc["name"]),
+                    subtitle: Text("Capital: ${doc["capital"]}, Population: ${doc["population"]}"),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(icon: Icon(Icons.edit,color: Colors.blue,), onPressed: () => _showEditDialog(doc)),
+                        IconButton(icon: Icon(Icons.delete,color: Colors.red,), onPressed: () => _deleteCountry(doc.id)),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                // Add padding at the bottom to prevent the FloatingActionButton from covering content
+                SizedBox(height: 80),
+              ],
             );
           },
         ),

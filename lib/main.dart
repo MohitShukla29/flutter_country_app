@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
       // ),
       themeMode: themeController.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData.light(),
+      debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),
       initialRoute: '/splash',
       getPages: [
